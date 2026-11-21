@@ -1,0 +1,106 @@
+% IETF Minimal Beamer theme
+% Recreated from the user-provided IETF slide template (4:3 PowerPoint).
+% Use: \usetheme{IETFMinimal}
+% Recommended: compile with lualatex (or xelatex).
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerthemeIETFMinimal}[2026/11/20 Minimal IETF-style Beamer theme]
+\mode<presentation>
+
+\RequirePackage{tikz}
+\RequirePackage{graphicx}
+\RequirePackage{iftex}
+\RequirePackage{xcolor}
+\usetikzlibrary{calc}
+
+% Fonts used by the source PowerPoint: Open Sans and Montserrat.
+\ifPDFTeX
+  \RequirePackage[T1]{fontenc}
+  \RequirePackage[default]{opensans}
+  \newcommand{\IETFMetaFont}{\sffamily}
+\else
+  \RequirePackage{fontspec}
+  \IfFontExistsTF{Open Sans}{\setsansfont{Open Sans}}{\setsansfont{TeX Gyre Heros}}
+  \IfFontExistsTF{Montserrat}{\newfontfamily\IETFMetaFont{Montserrat}}{\newcommand{\IETFMetaFont}{\sffamily}}
+\fi
+
+\definecolor{IETFTeal}{HTML}{002D3C}
+\definecolor{IETFPaper}{HTML}{FAFAFA}
+\definecolor{IETFGrey}{HTML}{808080}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{normal text}{fg=IETFTeal,bg=IETFPaper}
+\setbeamercolor{frametitle}{fg=white,bg=IETFTeal}
+\setbeamercolor{itemize item}{fg=IETFTeal}
+\setbeamercolor{itemize subitem}{fg=IETFTeal}
+\setbeamerfont{frametitle}{size=\fontsize{19}{23}\selectfont,series=\mdseries}
+\setbeamerfont{itemize/enumerate body}{size=\fontsize{12.4}{17.4}\selectfont}
+\setbeamerfont{itemize/enumerate subbody}{size=\fontsize{12.4}{17.4}\selectfont}
+\setbeamerfont{itemize/enumerate subsubbody}{size=\fontsize{12.4}{17.4}\selectfont}
+\setbeamerfont{footline}{size=\fontsize{8.3}{10}\selectfont}
+\setlength{\parindent}{0pt}
+\setbeamersize{text margin left=0.393in,text margin right=0.247in}
+
+% Exact 4:3 proportions of the supplied template: the title strip is 0.667in.
+\setbeamertemplate{background}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[IETFPaper] (current page.south west) rectangle (current page.north east);
+    \fill[IETFTeal] (current page.north west) rectangle ([yshift=-0.667in]current page.north east);
+  \end{tikzpicture}%
+}
+
+% Place title in the teal strip; reserve the title-strip height in the frame flow.
+\setbeamertemplate{frametitle}{%
+  \nointerlineskip
+  \begin{beamercolorbox}[wd=\paperwidth,ht=0.667in,dp=0pt]{frametitle}
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[anchor=north west,inner sep=0,text=white,font=\fontsize{19}{23}\selectfont]
+        at ([xshift=0.181in,yshift=-0.281in]current page.north west)
+        {\insertframetitle};
+    \end{tikzpicture}%
+  \end{beamercolorbox}%
+}
+
+% Use Beamer's standard, font-relative circular bullet markers at all levels.
+% This replaces the oversized first-level dot in the original PowerPoint.
+\setbeamertemplate{itemize items}[circle]
+\makeatletter
+\setlength{\leftmargini}{0.212in}
+\setlength{\leftmarginii}{0.126in}
+\setlength{\leftmarginiii}{0.116in}
+\setlength{\labelsep}{0.081in}
+\makeatother
+
+% Small IETF logo and slide number (excluding [plain] frames).
+\setbeamertemplate{footline}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=south west,inner sep=0,text=IETFGrey,font=\fontsize{8.2}{10}\selectfont]
+      at ([xshift=.091in,yshift=.141in]current page.south west)
+      {\insertframenumber};
+    \node[anchor=south west,inner sep=0]
+      at ([xshift=4.522in,yshift=.198in]current page.south west)
+      {\includegraphics[width=.454in,height=.260in]{ietf-logo-small.png}};
+  \end{tikzpicture}%
+}
+
+% The title page layout is intentionally independent of the normal header.
+% Usage: \begin{frame}[plain] \titlepage \end{frame}
+\setbeamertemplate{title page}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[IETFTeal] (current page.north west) rectangle ([yshift=-3.048in]current page.north east);
+    \fill[white] ([yshift=-3.048in]current page.north west) rectangle (current page.south east);
+    \node[anchor=north west,inner sep=0,text=white,font=\fontsize{19}{23}\selectfont]
+      at ([xshift=.267in,yshift=-1.704in]current page.north west)
+      {\inserttitle};
+    \node[anchor=north west,inner sep=0,text=white,font=\IETFMetaFont\fontsize{11.5}{15}\selectfont]
+      at ([xshift=.333in,yshift=-2.137in]current page.north west)
+      {\insertsubtitle};
+    \node[anchor=north west,inner sep=0,text=black,align=left,font=\IETFMetaFont\fontsize{8.8}{10.85}\selectfont]
+      at ([xshift=.348in,yshift=-3.195in]current page.north west)
+      {\insertauthor\\\insertinstitute\\\insertdate};
+    \node[anchor=north west,inner sep=0]
+      at ([xshift=4.219in,yshift=-3.169in]current page.north west)
+      {\includegraphics[width=.692in,height=.368in]{ietf-logo-title.png}};
+  \end{tikzpicture}%
+}
+
+\mode<all>
